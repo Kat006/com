@@ -7,7 +7,7 @@ import java.awt.Color;
 //De plus, vous pouvez(meme vous DEVEZ) ajouter des variables d'instances
 
 // Chaque classe de jeu que vous devez faire (ex: jeu de la vie) doit étendre cette classe.
-public class Automate {
+public abstract class Automate {
 	
     protected int[][] etat;
     protected int taille;
@@ -28,6 +28,11 @@ public class Automate {
     public void setEtats(int[][] etats) {
     	this.etat = etats;
     }
+    
+	public void setEtat(int col, int ran, int etat) {
+		
+	}
+	
     
     public void step() {
     }

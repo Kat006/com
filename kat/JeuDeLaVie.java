@@ -25,12 +25,9 @@ public class JeuDeLaVie extends Automate {
 		int[][] etatNew = new int[taille][taille];
 		for (int i = 0; i < taille; i++) {
 			for (int j = 0; j < taille; j++) {
-				if (etat[i][j] == 0) {
-					if (compteAuTour(i, j) == 3) {
+				if (etat[i][j] == 0 && compteAuTour(i, j) == 3) {
 						etatNew[i][j] = 1;
-					}
-				} else if (etat[i][j] == 1) {
-					if (compteAuTour(i, j) != 2 && compteAuTour(i, j) != 3)
+				} else if (etat[i][j] == 1 && (compteAuTour(i, j) < 2 || compteAuTour(i, j) > 3)) {
 						etatNew[i][j] = 0;
 				} else {
 					etatNew[i][j] = etat[i][j];
@@ -42,8 +39,8 @@ public class JeuDeLaVie extends Automate {
 
 	private int compteAuTour(int rangee, int colonne) {
 		int vivantes = 0;
-		for (int col = rangee - 1; col < rangee + 2; col++) {
-			for (int ligne = colonne - 1; ligne < colonne + 2; ligne++) {
+		for (int col = rangee - 1; col <= rangee + 1; col++) {
+			for (int ligne = colonne - 1; ligne <= colonne + 1; ligne++) {
 				try {
 					if (etat[col][ligne] == 1) {
 						vivantes++;

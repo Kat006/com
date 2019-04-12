@@ -6,13 +6,19 @@ import java.util.Random;
 public class Fourmis extends Automate {
 	private static final int[] tourne= {-1,1};
 	private static final int lesCotes= 4;
+	private static int lig;
+	private static int col;
+	private static int cotes;
+	private static int etatActuel;
 
+	
 
 	public Fourmis(int taille) {
 		super(taille);
-		int lig = new Random().nextInt(10);
-		int col = new Random().nextInt(10);
-		etat[lig][col] = 1;
+		lig = new Random().nextInt(taille);
+		col = new Random().nextInt(taille);
+		cotes = new Random().nextInt(lesCotes);
+		etat[lig][col]= 1;
 	}
 
 	public Color getCouleur(int etat) {
@@ -35,16 +41,27 @@ public class Fourmis extends Automate {
 
 	@Override
 	public void step() {
-		int direction = new Random().nextInt(lesCotes);
+		
 		//changer le couleur
-		setEtat(lig,col,etat = add(etat,1,tourne.length));
+		setEtat(lig,col,etatActuel = additionner(etatActuel, 1, tourne.length));
 		//tourner
-		//continuerDeBouger()
+		cotes = additionner(cotes, tourne.length, lesCotes);
+		continuerDeBouger(2);
 		//nouveauEtat getEtat
+		etatActuel = getEtat(lig, col);
 		//mettreEtat setEtat
+		setEtat(lig, col, tourne.length);
 	}
 
-	private int[][] add(int[][] etat, int i, int length) {
-		return null;
+	private void continuerDeBouger(int i) {
+		if(cotes % 2 == 0 ) {
+			lig = additionner(lig,(cotes ==0 ? -i : i), taille);
+		}else {
+			col = additionner(col,(cotes ==1 ? i : -i), taille);
+		}
+	}
+
+	private static int additionner(int numero, int additioner, int longeurMaximal) {
+		return (numero +(additioner >=0 ? additioner : longeurMaximal + additioner)) % longeurMaximal;
 	}
 }
