@@ -47,7 +47,7 @@ public class AutomateViewer extends JFrame {
         buttonReset = new JButton("Reinitialiser");
         buttonStep = new JButton("Step");
         listAutomate = new JComboBox<String>(automateNom);
-        sliderSpeed = new JSlider(25, 200);
+        sliderSpeed = new JSlider(1, 200);
         sliderSpeed.setPaintTicks(true);
         sliderSpeed.setSnapToTicks(true);
         sliderSpeed.setMajorTickSpacing(25);
