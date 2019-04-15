@@ -8,26 +8,30 @@ public class Fourmis extends Automate {
 	private static final int[] haut = {-1,0},droite= {0,+1},gauche= {0,-1},bas= {+1,0};
 	private static final int[][] lesCotes= {haut,bas,gauche,droite};
 	private Direction ouAller;
+	private final int vide = 0, terre = 1, fourmi =2;
 
 	public Fourmis(int taille) {
 		super(taille);
+		inisialiserVariablesAvecRandom(taille);
+		etatActuel =vide;
+		etat[col][lig]= fourmi;
+		wantSomeDirections();
+	}
+
+	private void inisialiserVariablesAvecRandom(int taille) {
 		lig = oldLig = new Random().nextInt(taille);
 		col = oldCol = new Random().nextInt(taille);
 		cote = new Random().nextInt(lesCotes.length);
-		etat[col][lig]= 1;
-		wantSomeDirections();
 	}
 
 	public Color getCouleur(int etat) {
 		switch (etat) {
-		case 0:
+		case vide:
 			return Color.WHITE;
-		case 1:
-			return Color.RED;
-		case 2:
+		case terre:
 			return Color.BLACK;
 		default:
-			return Color.CYAN;
+			return Color.RED;
 		}
 	}
 
@@ -39,15 +43,16 @@ public class Fourmis extends Automate {
 	@Override
 	public void step() {
 		//case presedent change white(0) black(2)
+		//modifier le dernier
+		etat[oldCol][oldLig] = etatActuel;
+		
+		bouger();
+		
+		etatActuel = etat[col][lig];
 		oldLig = lig;
 		oldCol = col;
 		
-		if(etatActuel == 0) {
-			etatActuel = 2;
-		}
-		if(etatActuel ==2) {
-			etatActuel = 0;
-		}
+		changerDirection();
 		
 		//premier pas
 		col += lesCotes[cote][1];
@@ -55,11 +60,34 @@ public class Fourmis extends Automate {
 		etat[col][lig] = 1;
 		//changer le couleur
 		
-		//tourner
+		
 
 		//nouveauEtat getEtat
 		etatActuel = getEtat(lig, col);
 		//mettreEtat setEtat
+		etat[lig][col] = etatActuel;
+	}
+
+	private void changerDirection() {
+		if(etatActuel == vide) {
+			ouAller = ouAller.getGauche();
+			etatActuel = terre;
+		}
+		if(etatActuel ==2) {
+			ouAller = ouAller.getDroite();
+			etatActuel = vide;
+		}
+	}
+
+	private void bouger() {
+		if(ouAller.getDirection() == "haut")
+			col--;
+		if(ouAller.getDirection() == "bas")
+			lig++;
+		if(ouAller.getDirection() == "gauche")
+			col++;
+		if(ouAller.getDirection() == "droite")
+			lig--;
 	}
 	
 	private void wantSomeDirections(){
@@ -77,7 +105,7 @@ public class Fourmis extends Automate {
 		private String direction;
 		
 		public Direction(String dir) {
-			this.direction = dir;
+			this.setDirection(dir);
 		}
 		
 		public Direction getGauche() {
@@ -85,7 +113,7 @@ public class Fourmis extends Automate {
 		}
 
 
-		public Direction getGroite() {
+		public Direction getDroite() {
 			return droite;
 		}
 
@@ -93,6 +121,14 @@ public class Fourmis extends Automate {
 		public void setDroite(Direction droite) {
 			this.droite = droite;
 			droite.gauche = this;
+		}
+
+		public String getDirection() {
+			return direction;
+		}
+
+		public void setDirection(String direction) {
+			this.direction = direction;
 		}
 	}
 }

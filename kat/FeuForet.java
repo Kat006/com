@@ -21,9 +21,9 @@ public class FeuForet extends Automate {
 
 	public Color getCouleur(int etat) {
 		switch (etat) {
-		case 0:
+		case terre:
 			return Color.WHITE;
-		case 1:
+		case arbre:
 			return Color.GREEN;
 		default:
 			return Color.PINK;
@@ -35,13 +35,17 @@ public class FeuForet extends Automate {
 		int[][] etatNouveau = new int[taille][taille];
 		for (int i = 0; i < taille; i++) {
 			for (int j = 0; j < taille; j++) {
-				double probabilite = rand.nextDouble();
-				siTerre(etatNouveau, i, j, probabilite);
-				siFeu(etatNouveau, i, j);
-				siArbre(etatNouveau, i, j, probabilite);
+				pbabiliteDeProchainPas(etatNouveau, i, j);
 			}
 		}
 		etat = etatNouveau;
+	}
+
+	private void pbabiliteDeProchainPas(int[][] etatNouveau, int i, int j) {
+		double probabilite = rand.nextDouble();
+		siTerre(etatNouveau, i, j, probabilite);
+		siFeu(etatNouveau, i, j);
+		siArbre(etatNouveau, i, j, probabilite);
 	}
 
 	private void siArbre(int[][] etatNouveau, int i, int j, double probabilite) {
@@ -80,7 +84,6 @@ public class FeuForet extends Automate {
 						return true;
 					}
 				} catch (ArrayIndexOutOfBoundsException e) {
-
 				}
 			}
 		}
