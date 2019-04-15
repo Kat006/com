@@ -4,21 +4,18 @@ import java.awt.Color;
 import java.util.Random;
 
 public class Fourmis extends Automate {
-	private static final int[] tourne= {-1,1};
-	private static final int lesCotes= 4;
-	private static int lig;
-	private static int col;
-	private static int cotes;
-	private static int etatActuel;
-
-	
+	private static int lig, col, cote, etatActuel, oldLig, oldCol;
+	private static final int[] haut = {-1,0},droite= {0,+1},gauche= {0,-1},bas= {+1,0};
+	private static final int[][] lesCotes= {haut,bas,gauche,droite};
+	private Direction ouAller;
 
 	public Fourmis(int taille) {
 		super(taille);
-		lig = new Random().nextInt(taille);
-		col = new Random().nextInt(taille);
-		cotes = new Random().nextInt(lesCotes);
-		etat[lig][col]= 1;
+		lig = oldLig = new Random().nextInt(taille);
+		col = oldCol = new Random().nextInt(taille);
+		cote = new Random().nextInt(lesCotes.length);
+		etat[col][lig]= 1;
+		wantSomeDirections();
 	}
 
 	public Color getCouleur(int etat) {
@@ -41,27 +38,61 @@ public class Fourmis extends Automate {
 
 	@Override
 	public void step() {
+		//case presedent change white(0) black(2)
+		oldLig = lig;
+		oldCol = col;
 		
+		if(etatActuel == 0) {
+			etatActuel = 2;
+		}
+		if(etatActuel ==2) {
+			etatActuel = 0;
+		}
+		
+		//premier pas
+		col += lesCotes[cote][1];
+		lig += lesCotes[cote][0];
+		etat[col][lig] = 1;
 		//changer le couleur
-		setEtat(lig,col,etatActuel = additionner(etatActuel, 1, tourne.length));
+		
 		//tourner
-		cotes = additionner(cotes, tourne.length, lesCotes);
-		continuerDeBouger(2);
+
 		//nouveauEtat getEtat
 		etatActuel = getEtat(lig, col);
 		//mettreEtat setEtat
-		setEtat(lig, col, tourne.length);
 	}
-
-	private void continuerDeBouger(int i) {
-		if(cotes % 2 == 0 ) {
-			lig = additionner(lig,(cotes ==0 ? -i : i), taille);
-		}else {
-			col = additionner(col,(cotes ==1 ? i : -i), taille);
+	
+	private void wantSomeDirections(){
+		Direction[] someDirections = {new Direction("haut"), new Direction("bas"),new Direction("gauche"),new Direction("droite")};
+		someDirections[0].setDroite(someDirections[1]);
+		someDirections[1].setDroite(someDirections[2]);
+		someDirections[2].setDroite(someDirections[3]);
+		someDirections[3].setDroite(someDirections[0]);
+		ouAller = someDirections[new Random().nextInt(someDirections.length)];
+	}
+	
+	private static class Direction {
+		private Direction gauche;
+		private Direction droite;
+		private String direction;
+		
+		public Direction(String dir) {
+			this.direction = dir;
 		}
-	}
+		
+		public Direction getGauche() {
+			return gauche;
+		}
 
-	private static int additionner(int numero, int additioner, int longeurMaximal) {
-		return (numero +(additioner >=0 ? additioner : longeurMaximal + additioner)) % longeurMaximal;
+
+		public Direction getGroite() {
+			return droite;
+		}
+
+
+		public void setDroite(Direction droite) {
+			this.droite = droite;
+			droite.gauche = this;
+		}
 	}
 }

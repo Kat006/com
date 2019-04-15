@@ -31,6 +31,6 @@ public class AutomateCreateur {
      * @return Automate l'automate cree
      */
     public static Automate createFeuForet(int taille, double probaFeu, double probaForet, double probaPropagation) {
-        return new FeuForet(taille);
+        return new FeuForet(taille, probaFeu, probaForet, probaPropagation);
     }
 }
