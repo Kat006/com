@@ -3,7 +3,7 @@ package com.kat;
 import java.util.Random;
 
 public class JeuDeLaVie extends Automate {
-	private final int maybeInLive = 11;
+	private final int maybeAlive = 11;
 	private final int mort = 0, vivante = 1;
 
 	public JeuDeLaVie(int taille) {
@@ -20,7 +20,7 @@ public class JeuDeLaVie extends Automate {
 	}
 
 	private void genererLeDebut(int i, int j) {
-		double random = new Random().nextInt(maybeInLive);
+		double random = new Random().nextInt(maybeAlive);
 		if (random <= vivante) {
 			etat[i][j] = vivante;
 		} else {
@@ -71,7 +71,7 @@ public class JeuDeLaVie extends Automate {
 
 	private int siEnVieOnEleveDeTotal(int rangee, int colonne, int vivantes) {
 		if (etat[rangee][colonne] == vivante) {
-			vivantes = vivantes - 1;
+			vivantes = vivantes - vivante;
 		}
 		return vivantes;
 	}
